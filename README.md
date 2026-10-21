@@ -2,6 +2,8 @@
 
 A warm, responsive gift-planning foundation for families and friend groups. Built with Next.js App Router, TypeScript, Tailwind CSS v4, and Lucide icons. Light mode first, with keyboard-accessible dialogs, visible focus states, reduced-motion support, and mobile navigation.
 
+GiftNest's long-term aim is to help families and friends discover thoughtful gifts, coordinate wishlists, avoid duplicate purchases, and preserve the surprise of giving. This browser-local prototype is a starting point; secure shared coordination and duplicate-purchase prevention are future capabilities.
+
 ## Run locally
 
 Use Node.js 22 or 24 and npm.
