@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { actions, canViewProfile, type Data } from "../src/lib/store";
+import {
+  actions,
+  canViewProfile,
+  ownRecommendations,
+  type Data,
+} from "../src/lib/store";
 
 const entries = new Map<string, string>();
 Object.defineProperty(globalThis, "localStorage", {
@@ -95,4 +100,101 @@ test("local account, family membership, profile ownership and wishlist lifecycle
   await assert.rejects(
     actions.register("Duplicate", "taylor@example.com", "another-password"),
   );
+});
+
+test("suggestions stay anonymous and queued until the recipient explicitly reviews them", async () => {
+  await actions.register(
+    "Jordan Example",
+    "jordan.suggestions@example.com",
+    "prototype-test-482!",
+  );
+  const senderId = saved().currentId!;
+  assert.throws(() =>
+    actions.submitSuggestion("alex", { name: "A reading lamp" }),
+  );
+  actions.joinGroup("MORGAN26");
+  const oldWishlist = saved().profiles.find(
+    (person) => person.id === "alex",
+  )!.wishlist;
+  actions.submitSuggestion("alex", {
+    name: "A reading lamp",
+    reason: "A note that must not be displayed",
+    price: "25",
+  });
+  actions.submitSuggestion("alex", {
+    name: " A READING lamp ",
+    reason: "Another note",
+    price: "30",
+  });
+  const suggestion = saved().recommendations.find(
+    (record) => record.recipientId === "alex",
+  )!;
+  assert.equal(
+    saved().recommendations.filter((record) => record.recipientId === "alex")
+      .length,
+    1,
+  );
+  assert.deepEqual(
+    saved().profiles.find((person) => person.id === "alex")!.wishlist,
+    oldWishlist,
+  );
+  assert.ok(!JSON.stringify(suggestion).includes(senderId));
+  assert.deepEqual(Object.keys(suggestion).sort(), [
+    "id",
+    "name",
+    "price",
+    "reason",
+    "recipientId",
+    "status",
+  ]);
+  assert.equal(ownRecommendations(saved()).length, 0);
+  assert.throws(() =>
+    actions.submitSuggestion(senderId, { name: "For myself" }),
+  );
+  assert.throws(() => actions.reviewRecommendation(suggestion.id, "added"));
+
+  actions.demo();
+  actions.prepareRecommendations();
+  const queue = ownRecommendations(saved());
+  assert.equal(queue.length, 9);
+  assert.ok(
+    queue.every(
+      (record) => Object.keys(record).sort().join() === "id,name,price,status",
+    ),
+  );
+  const size = saved().recommendations.length;
+  actions.prepareRecommendations();
+  assert.equal(saved().recommendations.length, size);
+  actions.reviewRecommendation(suggestion.id, "saved");
+  assert.equal(
+    saved().recommendations.find((record) => record.id === suggestion.id)!
+      .status,
+    "saved",
+  );
+  actions.reviewRecommendation(suggestion.id, "added");
+  actions.reviewRecommendation(suggestion.id, "added");
+  const added = saved()
+    .profiles.find((person) => person.id === "alex")!
+    .wishlist.filter((wish) => wish.name === "A reading lamp");
+  assert.equal(added.length, 1);
+  assert.equal(added[0].note, "");
+  assert.equal(added[0].price, "25.00");
+  const unwanted = queue.find((record) => record.id !== suggestion.id)!;
+  actions.reviewRecommendation(unwanted.id, "dismissed");
+  actions.reviewRecommendation(unwanted.id, "added");
+  assert.equal(
+    saved().recommendations.find((record) => record.id === unwanted.id)!.status,
+    "dismissed",
+  );
+  await actions.login("jordan.suggestions@example.com", "prototype-test-482!");
+  actions.submitSuggestion("alex", { name: unwanted.name });
+  assert.equal(
+    saved().recommendations.find((record) => record.id === unwanted.id)!.status,
+    "dismissed",
+  );
+  actions.logout();
+  assert.throws(() => actions.submitSuggestion("alex", { name: "A gift" }));
+  assert.throws(() => actions.prepareRecommendations());
+  assert.throws(() => actions.reviewRecommendation(suggestion.id, "saved"));
+  assert.deepEqual(ownRecommendations(saved()), []);
 });

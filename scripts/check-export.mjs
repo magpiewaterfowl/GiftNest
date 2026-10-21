@@ -4,7 +4,7 @@ import { join, relative, resolve, sep } from "node:path";
 
 const root = resolve("out");
 const basePath = process.env.PAGES_BASE_PATH || "";
-const routes = ["", "dashboard", "signup", "login", "profile", "wishlist", "questionnaire", "results", "profile/alex", "profile/olivia", "profile/james", "profile/sophie"];
+const routes = ["", "dashboard", "signup", "login", "profile", "wishlist", "questionnaire", "results", "recommendations", "profile/alex", "profile/olivia", "profile/james", "profile/sophie"];
 for (const route of routes) {
   assert.ok((await stat(join(root, route, "index.html"))).isFile(), `Missing exported route: /${route}`);
 }

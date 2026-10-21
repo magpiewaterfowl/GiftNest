@@ -33,7 +33,15 @@ No external service credentials are needed. `npm start` previews the exported fr
 - Deterministic weighted scoring and five saved top categories.
 - Add, edit, remove, and mark wishlist items as received, with optional prices, links, notes, and photos.
 - Browse profiles, interests, wishes, and upcoming occasions in your family groups.
+- Submit unattributed gift ideas for other group members and review a source-neutral mix of category ideas, sample ideas, and submitted suggestions.
+- Add recommendations to your wishlist, save them for later, or dismiss them without sender-facing activity feedback.
 - Unit and local-store workflow tests, plus GitHub Actions checks.
+
+## Gift Suggestions
+
+Choose **Suggest a gift** on another member's profile. Suggestions go to their recommendation queue, never directly to their wishlist. The recipient can review **Gift inspiration**, add an idea to their wishlist, save it for later, or choose Not interested. All sources use the same card layout without attribution, popularity counts, or activity receipts. Optional reasons stay off recipient cards to avoid revealing identifying context.
+
+The browser-local model does not store sender identity, but **it cannot guarantee anonymity or confidentiality from someone who inspects browser storage or recognizes gift wording**. Adding an idea to a shared wishlist can also allow inferences. Do not enter purchase plans or sensitive details. See [the gift-suggestion data model and privacy notes](docs/gift-suggestions.md) for migration behavior, deduplication, mixing, and future backend requirements. No authentication provider, backend, or AI integration was added.
 
 ## Important: local preview, not production accounts
 
@@ -55,6 +63,8 @@ src/components/ui.tsx    Shared navigation, avatars, dialogs, group controls
 src/components/views.tsx Page views and workflow forms
 src/lib/store.ts         Local data types, persistence, and mutation actions
 src/lib/questionnaire.ts Questions, twenty categories, scoring function
+src/lib/recommendations.ts Source-free queue model, templates, validation, projection
+src/components/recommendations.tsx Suggestion form and recipient review page
 tests/                   Scoring and store workflow tests
 .github/workflows/ci.yml  Lint, tests, build, and type checks
 .github/workflows/pages.yml Personal-account-only Pages build and deployment
@@ -97,7 +107,7 @@ These describe the future shared product, not new functionality delivered in thi
 - Member profiles and gift-interest categories.
 - Wishlists that retain items after reservation or purchase.
 - Private gift reservations that prevent duplicate purchases.
-- Hidden family-submitted suggestions blended into recommendation lists.
+- Secure cross-device family suggestions blended into recommendation lists (the browser-local simulation is now included).
 - Surprise-preserving recipient and gift-giver views.
 - Optional privacy-conscious AI prompt generation.
 - A future backend for shared, cross-device data.
@@ -105,6 +115,10 @@ These describe the future shared product, not new functionality delivered in thi
 The current groups and accounts are local simulations, not private shared services. A later phase will replace the local-store adapter with authenticated server endpoints and persistent storage, move permission checks to the server, and introduce questionnaire versioning and migrations. The pure questionnaire scoring function can remain independent of that infrastructure.
 
 No AI integration, external gift recommendation service, or adaptive questionnaire logic is implemented.
+
+## Product design
+
+See [the product-design summary](docs/product-design-summary.md) for the year-round theme, palette, typography, screens reviewed, accessibility decisions, and remaining opportunities. This presentation pass does not change storage, questionnaire scoring, routes, or planned-feature availability.
 
 ## Assets and dependencies
 

@@ -48,6 +48,12 @@ import {
   GroupModal,
   Modal,
 } from "./ui";
+import { GiftSuggestionModal } from "./recommendations";
+
+const giftPhoto =
+  "https://images.unsplash.com/photo-1607344645866-009c320b63e0?auto=format&fit=crop&w=1600&q=85";
+const familyPhoto =
+  "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1800&q=85";
 
 function DemoButton({
   className = "button secondary",
@@ -81,10 +87,10 @@ export function LandingView() {
       <header className="landing-nav">
         <Brand />
         <nav aria-label="Site navigation">
-          <a href="#closer">A little about us</a>
+          <a href="#closer">The thoughtful part</a>
           <Link href="/login">Log in</Link>
           <Link className="button primary" href="/signup">
-            Make yourself at home
+            Start your nest
             <ArrowUpRight size={17} />
           </Link>
         </nav>
@@ -93,34 +99,35 @@ export function LandingView() {
         <section
           className="landing-hero"
           style={{
-            backgroundImage: `linear-gradient(90deg, rgba(20,49,42,.88), rgba(20,49,42,.48) 55%, rgba(20,49,42,.08)), url('${photos.gift}')`,
+            backgroundImage: `linear-gradient(90deg, rgba(20,49,42,.94), rgba(20,49,42,.7) 48%, rgba(20,49,42,.08)), url('${familyPhoto}')`,
           }}
         >
           <div className="landing-hero-content">
             <span className="eyebrow light">
               <span />
-              FOR THE PEOPLE WHO MATTER
+              LITTLE WISHES. CLOSER CONNECTIONS.
             </span>
             <h1>GiftNest.</h1>
             <h2>
-              Good gifts start with
+              Less guessing.
               <br />
-              knowing your people.
+              More knowing them.
             </h2>
             <p>
-              Little wishes. Big smiles. A thoughtful place to bring your family
-              together, one gift at a time.
+              For the family member who says &ldquo;anything is lovely&rdquo;
+              and the friend who has everything. Find a little inspiration in
+              the things that make them, them.
             </p>
             <div className="hero-actions">
               <Link href="/signup" className="button coral">
-                Create your family nest
+                Make yourself at home
                 <ArrowUpRight size={18} />
               </Link>
               <DemoButton className="button glass" />
             </div>
             <div className="hero-footnote">
               <Heart size={15} />
-              Less guessing. More &ldquo;you remembered!&rdquo;
+              For birthdays, holidays, and ordinary just-because days.
             </div>
           </div>
           <a
@@ -133,47 +140,78 @@ export function LandingView() {
         </section>
         <section id="closer" className="landing-about">
           <div>
-            <span className="eyebrow">IT IS THE THOUGHT THAT COUNTS</span>
+            <span className="eyebrow">
+              A GOOD GIFT STARTS WITH A LITTLE KNOWING
+            </span>
             <h2>
-              A little closer.
-              <br />A lot more thoughtful.
+              The best part? <br />
+              Feeling understood.
             </h2>
           </div>
           <div className="about-items">
             <article>
               <Users size={23} />
-              <h3>Your people, together</h3>
+              <h3>Know a little more</h3>
               <p>
-                A shared space for family, close friends, and everyone who feels
-                like home.
+                Their weekend rituals. The hobby they always come back to.
+                Little interests that lead to meaningful gifts.
               </p>
             </article>
             <article>
               <Sparkles size={23} />
-              <h3>The things that make them, them</h3>
+              <h3>Leave the last-minute rush behind</h3>
               <p>
-                Discover gift interests through everyday preferences, not
-                stereotypes.
+                A few wishes to return to, long before a birthday or the holiday
+                rush. Less pressure to find the perfect thing.
               </p>
             </article>
             <article>
               <Heart size={23} />
-              <h3>Wishes worth remembering</h3>
+              <h3>A hint, not the whole surprise</h3>
               <p>
-                Keep a little list of things you love and find inspiration in
-                theirs.
+                Take inspiration from what they love. The final choice, the
+                handwritten note, and the lovely surprise are still yours.
               </p>
             </article>
           </div>
         </section>
+        <section className="landing-moment" aria-labelledby="moment-heading">
+          <div
+            className="moment-photo"
+            role="img"
+            aria-label="A thoughtful book, ready to become someone's next favorite read"
+            style={{ backgroundImage: `url('${photos.book}')` }}
+          />
+          <div className="moment-copy">
+            <span className="eyebrow">IT DOES NOT HAVE TO BE A BIG THING</span>
+            <h2 id="moment-heading">
+              A book they will stay up for.
+              <br />A little &ldquo;I remembered.&rdquo;
+            </h2>
+            <p>
+              A thoughtful gift says you noticed. A new interest. A familiar
+              comfort. Something that makes an ordinary day feel special.
+            </p>
+            <p>GiftNest starts with your people, not a shopping list.</p>
+            <DemoButton className="text-button">
+              Take a look around
+              <ArrowUpRight size={17} />
+            </DemoButton>
+          </div>
+        </section>
         <section className="landing-cta">
           <Gift size={31} />
-          <h2>Make someone feel known.</h2>
+          <span className="eyebrow">
+            FOR YOUR FAMILY. YOUR FRIENDS. YOUR PEOPLE.
+          </span>
+          <h2>Make someone feel a little more known.</h2>
           <Link href="/signup" className="button primary">
-            Start your nest
+            Create my account
             <ArrowUpRight size={18} />
           </Link>
-          <p>Free local preview. No AI. Just a little thoughtfulness.</p>
+          <p>
+            This early version saves your nest in this browser, on this device.
+          </p>
         </section>
       </main>
       <footer className="landing-footer">
@@ -198,7 +236,7 @@ export function AuthView({ signup = false }: { signup?: boolean }) {
       <div
         className="auth-story"
         style={{
-          backgroundImage: `linear-gradient(0deg, rgba(19,55,43,.9), rgba(19,55,43,.15)), url('${photos.gift}')`,
+          backgroundImage: `linear-gradient(0deg, rgba(19,55,43,.94), rgba(19,55,43,.2)), url('${familyPhoto}')`,
         }}
       >
         <Brand light />
@@ -228,11 +266,11 @@ export function AuthView({ signup = false }: { signup?: boolean }) {
             <Gift size={29} />
           </span>
           <span className="eyebrow">A LITTLE SPACE FOR YOUR PEOPLE</span>
-          <h1>{signup ? "Welcome to the nest." : "Good to have you back."}</h1>
+          <h1>{signup ? "Welcome to your nest." : "Welcome home."}</h1>
           <p className="muted">
             {signup
-              ? "Thoughtful moments start here."
-              : "Your people. Your wishes. All in one place."}
+              ? "A little about you. A little inspiration for the people you love."
+              : "Your favorite people and a few lovely wishes are right where you left them."}
           </p>
           <form
             onSubmit={async (event) => {
@@ -296,7 +334,7 @@ export function AuthView({ signup = false }: { signup?: boolean }) {
                   placeholder={
                     signup
                       ? "At least 8 characters"
-                      : "Your local account password"
+                      : "The password you used on this device"
                   }
                   autoComplete={signup ? "new-password" : "current-password"}
                   minLength={signup ? 8 : 1}
@@ -324,7 +362,9 @@ export function AuthView({ signup = false }: { signup?: boolean }) {
               disabled={busy}
             >
               {busy
-                ? "One little moment..."
+                ? signup
+                  ? "Making room for you..."
+                  : "Opening your nest..."
                 : signup
                   ? "Create my account"
                   : "Log in"}
@@ -338,13 +378,13 @@ export function AuthView({ signup = false }: { signup?: boolean }) {
           <p className="auth-switch">
             {signup ? "Already have a nest?" : "New around here?"}{" "}
             <Link href={signup ? "/login" : "/signup"}>
-              {signup ? "Log in" : "Make yourself at home"}
+              {signup ? "Log in" : "Create an account"}
             </Link>
           </p>
           <p className="local-note">
-            <ShieldCheck size={17} />
-            Local preview only. Accounts stay in this browser and cannot be
-            recovered. Use a unique test password, not a real one.
+            <ShieldCheck size={17} />A note before you start: this early version
+            saves everything in this browser, on this device. Accounts cannot be
+            recovered, so use a made-up password you do not use elsewhere.
           </p>
         </div>
         <span className="auth-bottom">A little thought goes a long way.</span>
@@ -404,7 +444,9 @@ export function DashboardView() {
             Hello, {user?.name.split(" ")[0] ?? "friend"}
             <span className="greeting-dot">.</span>
           </h1>
-          <p>Let&apos;s make someone&apos;s day.</p>
+          <p>
+            A few familiar faces. A little inspiration for their next happy day.
+          </p>
         </div>
         <button className="button primary" onClick={() => setModal("invite")}>
           <Plus size={17} />
@@ -421,7 +463,7 @@ export function DashboardView() {
             Great gifts begin with
             <br />a little knowing.
           </h2>
-          <p>Big passions. Small wishes. Your favorite people.</p>
+          <p>Their favorite things are a thoughtful place to start.</p>
           <Link href="/questionnaire" className="button white">
             Discover my gift interests
             <ArrowUpRight size={17} />
@@ -429,7 +471,7 @@ export function DashboardView() {
         </div>
         <div
           className="welcome-photo"
-          style={{ backgroundImage: `url('${photos.gift}')` }}
+          style={{ backgroundImage: `url('${giftPhoto}')` }}
           role="img"
           aria-label="Thoughtfully wrapped gifts"
         />
@@ -459,7 +501,7 @@ export function DashboardView() {
           <strong>
             {members.filter((member) => member.categories.length > 0).length}
           </strong>
-          <span>personalities, unwrapped</span>
+          <span>people with gift interests</span>
         </div>
       </div>
       {!group ? (
@@ -468,7 +510,10 @@ export function DashboardView() {
             <Users size={30} />
           </span>
           <h2>Every nest starts with someone.</h2>
-          <p>Bring your favorite people into a space of their own.</p>
+          <p>
+            Make a place for your family, your oldest friends, or your Sunday
+            crew.
+          </p>
           <div className="button-row">
             <button
               className="button primary"
@@ -542,7 +587,10 @@ export function DashboardView() {
                 <div className="empty-state compact">
                   <Search size={24} />
                   <h3>No one found</h3>
-                  <p>Try another name or filter.</p>
+                  <p>
+                    No familiar faces match just yet. Try another name or see
+                    everyone.
+                  </p>
                   <button
                     className="text-button"
                     onClick={() => {
@@ -581,7 +629,7 @@ export function DashboardView() {
                       ) : (
                         <Gift size={38} />
                       )}
-                      <span className="wish-heart">
+                      <span className="wish-heart" aria-hidden="true">
                         <Heart size={16} />
                       </span>
                     </div>
@@ -619,15 +667,11 @@ export function DashboardView() {
                 <Sparkles size={24} />
               </span>
               <span className="eyebrow">A LITTLE SELF-DISCOVERY</span>
-              <h3>
-                What makes you,
-                <br />
-                you?
-              </h3>
+              <h3>What feels like you?</h3>
               <p>
                 {user?.answers.length
                   ? "Your interests are part of your story. There is always something new to discover."
-                  : "A few everyday choices. A few delightful discoveries about your gift personality."}
+                  : "A favorite way to spend a weekend. A small everyday pleasure. Your gift interests start with the things you enjoy."}
               </p>
               <Link
                 href={user?.answers.length ? "/results" : "/questionnaire"}
@@ -681,8 +725,8 @@ export function DashboardView() {
                 ))
               ) : (
                 <p className="muted small">
-                  No occasions on the calendar yet. An optional birthday can be
-                  added to your profile.
+                  Nothing on the calendar just yet. Add your birthday to your
+                  profile if you would like a little celebrating.
                 </p>
               )}
             </section>
@@ -708,7 +752,9 @@ export function DashboardView() {
 function MemberCard({ profile, own }: { profile: Profile; own: boolean }) {
   return (
     <Link
-      href={own ? "/profile" : `/profile/?member=${encodeURIComponent(profile.id)}`}
+      href={
+        own ? "/profile" : `/profile/?member=${encodeURIComponent(profile.id)}`
+      }
       className="member-card"
     >
       <div className={`member-cover ${profile.color}`}>
@@ -722,8 +768,10 @@ function MemberCard({ profile, own }: { profile: Profile; own: boolean }) {
         <h3>{profile.name}</h3>
         <span className="member-subtitle">
           {profile.categories.length
-            ? "A few of their favorite things"
-            : "A personality waiting to be unwrapped"}
+            ? own
+              ? "A few of your favorite things"
+              : "A few of their favorite things"
+            : "More lovely things to discover"}
         </span>
         <div className="member-tags">
           {profile.categories.slice(0, 2).map((category) => (
@@ -763,6 +811,8 @@ export function ProfileView({
   const [editing, setEditing] = useState(false);
   const [wishEdit, setWishEdit] = useState<WishlistItem | "new" | null>(null);
   const [status, setStatus] = useState("");
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestionSent, setSuggestionSent] = useState(false);
   const own = !memberId || memberId === user?.id;
   const profile = memberId
     ? data?.profiles.find((entry) => entry.id === memberId)
@@ -783,14 +833,14 @@ export function ProfileView({
               </span>
               <h1>
                 {wishlistOnly
-                  ? "My little wishlist"
+                  ? "My wishlist"
                   : own
                     ? "My profile"
                     : `${profile.name.split(" ")[0]}'s corner`}
               </h1>
               <p>
                 {wishlistOnly
-                  ? "A few things you would love, for the people who love you."
+                  ? "Something useful, something lovely, or a day to remember."
                   : "The passions, preferences, and little things that matter."}
               </p>
             </div>
@@ -805,7 +855,34 @@ export function ProfileView({
                 {wishlistOnly ? "Add a wish" : "Edit my profile"}
               </button>
             )}
+            {!own && (
+              <button
+                className="button primary"
+                onClick={() => {
+                  setSuggesting(true);
+                  setSuggestionSent(false);
+                }}
+              >
+                <Gift size={17} />
+                Suggest a gift
+              </button>
+            )}
           </div>
+          {suggestionSent && (
+            <p role="status" className="success-message">
+              Your idea is tucked away for a future recommendation review.
+            </p>
+          )}
+          {suggesting && !own && (
+            <GiftSuggestionModal
+              recipient={profile}
+              onClose={() => setSuggesting(false)}
+              onSent={() => {
+                setSuggesting(false);
+                setSuggestionSent(true);
+              }}
+            />
+          )}
           {!wishlistOnly && (
             <>
               <section className="profile-overview">
@@ -838,7 +915,7 @@ export function ProfileView({
                   </div>
                   {own && (
                     <span className="profile-own-badge">
-                      <CheckCircle2 size={15} />
+                      <Heart size={15} />
                       Your personal corner
                     </span>
                   )}
@@ -857,7 +934,7 @@ export function ProfileView({
                   {own && (
                     <Link href="/questionnaire" className="text-button">
                       {profile.answers.length
-                        ? "Retake questionnaire"
+                        ? "Revisit my interests"
                         : "Discover my interests"}
                       <ArrowUpRight size={16} />
                     </Link>
@@ -881,8 +958,8 @@ export function ProfileView({
                     <Sparkles size={24} />
                     <p>
                       {own
-                        ? "Your gift personality is waiting to be discovered."
-                        : "No gift interests shared yet."}
+                        ? "A favorite hobby or a perfect afternoon can say so much about you."
+                        : "Their favorite things are still waiting to be discovered."}
                     </p>
                     {own && (
                       <Link href="/questionnaire" className="button secondary">
@@ -906,7 +983,11 @@ export function ProfileView({
                       : `${profile.name.split(" ")[0]}'s wishlist`}
                   <span className="count-badge">{profile.wishlist.length}</span>
                 </h2>
-                <p>A little inspiration for a lot of thoughtfulness.</p>
+                <p>
+                  {own
+                    ? "Little hints, with plenty of room for a lovely surprise."
+                    : "A few hints from someone you know and love."}
+                </p>
               </div>
               {own && !wishlistOnly && (
                 <button
@@ -956,7 +1037,7 @@ export function ProfileView({
                           rel="noopener noreferrer"
                           className="text-button"
                         >
-                          View gift
+                          Open gift link
                           <ArrowUpRight size={16} />
                         </a>
                       ) : (
@@ -973,6 +1054,7 @@ export function ProfileView({
                                 ? "Mark as still wishing"
                                 : "Mark as received"
                             }
+                            aria-pressed={item.received}
                             onClick={() => {
                               actions.toggleWish(item.id);
                               setStatus(
@@ -1009,13 +1091,13 @@ export function ProfileView({
                 </span>
                 <h3>
                   {own
-                    ? "Every wish starts somewhere."
-                    : "A few wishes are still on their way."}
+                    ? "What would make your day?"
+                    : "A few lovely hints are still on their way."}
                 </h3>
                 <p>
                   {own
-                    ? "Something useful, something lovely, or an experience to remember."
-                    : "Check back for a little inspiration."}
+                    ? "A well-loved hobby, a small everyday treat, or something you have had your eye on. It all belongs here."
+                    : "Their interests are a thoughtful place to start in the meantime."}
                 </p>
                 {own && (
                   <button
@@ -1046,8 +1128,8 @@ export function ProfileView({
       ) : (
         <section className="empty-state">
           <Users size={32} />
-          <h1>This corner is private.</h1>
-          <p>You can view profiles of people in your family groups.</p>
+          <h1>We cannot find this familiar face.</h1>
+          <p>This profile may not be in your family groups on this device.</p>
           <Link className="button primary" href="/dashboard">
             Back to your family
             <ArrowRight size={17} />
@@ -1076,10 +1158,7 @@ function DeleteWish({
         <Trash2 size={16} />
       </button>
       {confirm && (
-        <Modal
-          title="Remove this little wish?"
-          onClose={() => setConfirm(false)}
-        >
+        <Modal title="Let this wish go?" onClose={() => setConfirm(false)}>
           <p className="muted">
             &ldquo;{item.name}&rdquo; will be removed from your wishlist. This
             cannot be undone.
@@ -1117,7 +1196,7 @@ function EditProfile({
   onClose: () => void;
 }) {
   return (
-    <Modal title="A little more about you" onClose={onClose}>
+    <Modal title="The little things that make you, you" onClose={onClose}>
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -1150,8 +1229,10 @@ function EditProfile({
           />
         </label>
         <label className="field">
-          Birthday, month and day{" "}
-          <span className="muted small">Optional. No birth year needed.</span>
+          Your birthday{" "}
+          <span className="muted small">
+            Optional. Just the month and day, never the year.
+          </span>
           <input
             type="text"
             name="birthday"
@@ -1191,7 +1272,7 @@ function WishEditor({
   ];
   return (
     <Modal
-      title={item ? "A little wish, refined" : "What are you wishing for?"}
+      title={item ? "Make this wish your own" : "What would you love?"}
       onClose={onClose}
     >
       <form
@@ -1216,7 +1297,7 @@ function WishEditor({
         }}
       >
         <label className="field">
-          Wish name
+          What are you wishing for?
           <input
             name="name"
             defaultValue={item?.name}
@@ -1239,7 +1320,7 @@ function WishEditor({
             />
           </label>
           <label className="field">
-            A little picture
+            A picture to go with it
             <select
               value={image}
               onChange={(event) => setImage(event.target.value)}
@@ -1253,7 +1334,7 @@ function WishEditor({
           </label>
         </div>
         <label className="field">
-          Product link <span className="muted small">Optional</span>
+          A link to the gift <span className="muted small">Optional</span>
           <input
             name="url"
             type="url"
@@ -1269,7 +1350,7 @@ function WishEditor({
             defaultValue={item?.note}
             rows={3}
             maxLength={400}
-            placeholder="A favorite color, a size, or why you love it..."
+            placeholder="A favorite color, a size, or the little reason it caught your eye..."
           />
         </label>
         {error && (
@@ -1312,9 +1393,11 @@ function Questionnaire() {
         <span className="large-icon">
           <Sparkles size={30} />
         </span>
-        <span className="eyebrow">YOUR GIFT PERSONALITY, UNWRAPPED</span>
-        <h1>A few little things about you.</h1>
-        <p>No labels. No wrong answers. Just what feels like you.</p>
+        <span className="eyebrow">A MOMENT TO BE YOURSELF</span>
+        <h1>What feels most like you?</h1>
+        <p>
+          Think everyday pleasures, not perfect answers. Go with what you enjoy.
+        </p>
       </div>
       {user?.answers.length === 10 && !restart && (
         <div className="previous-results">
@@ -1332,7 +1415,7 @@ function Questionnaire() {
       <section className="question-surface" aria-labelledby="question-title">
         <div className="question-progress-label">
           <span>
-            QUESTION {String(step + 1).padStart(2, "0")} OF {questions.length}
+            Question {step + 1} of {questions.length}
           </span>
           <span>
             {Math.round(
@@ -1357,6 +1440,13 @@ function Questionnaire() {
           {question.title}
         </h2>
         <p className="muted">{question.hint}</p>
+        <p className="question-encouragement">
+          {step < 4
+            ? "A little instinct goes a long way."
+            : step < 9
+              ? "A few lovely interests are taking shape."
+              : "One last little choice. Your results are nearly ready."}
+        </p>
         <fieldset className="answer-options">
           <legend className="sr-only">
             Choose the answer that feels most like you
@@ -1438,12 +1528,12 @@ function Questionnaire() {
       </section>
       <p className="question-privacy">
         <ShieldCheck size={15} />
-        Only your top five interests are shown to your family. Answers stay in
-        this browser.
+        Your profile shows your five top interests, not your individual answers.
+        Everything stays in this browser.
       </p>
       <p className="question-draft">
-        Your progress stays while this page is open. Refreshing starts a new
-        questionnaire.
+        Take your time. You can go back and change an answer. Refreshing this
+        page starts over.
       </p>
     </div>
   );
@@ -1472,8 +1562,8 @@ export function ResultsView() {
                 <span>thoughtfully unwrapped.</span>
               </h1>
               <p>
-                Five interests that feel like you. A little inspiration for your
-                people.
+                A little more to know about you. Five thoughtful starting points
+                for the people who love you.
               </p>
               <span className="saved-label">
                 <CheckCircle2 size={15} />
@@ -1491,7 +1581,7 @@ export function ResultsView() {
                     <span>
                       {index === 0
                         ? "YOUR STRONGEST MATCH"
-                        : "A LITTLE MORE YOU"}
+                        : "SOMETHING ELSE YOU ENJOY"}
                     </span>
                   </div>
                   <span className={`result-icon tone-${index}`}>
@@ -1525,7 +1615,7 @@ export function ResultsView() {
               <div className="button-row">
                 <Link className="button primary" href="/wishlist">
                   <Plus size={17} />
-                  Add a little wish
+                  Add a wish of my own
                 </Link>
                 <Link className="button secondary" href="/profile">
                   View my profile
@@ -1533,7 +1623,7 @@ export function ResultsView() {
                 </Link>
               </div>
               <Link href="/questionnaire" className="text-button">
-                Feeling different? Take it again
+                Interests change. Revisit yours anytime.
                 <ArrowRight size={15} />
               </Link>
             </div>
@@ -1543,10 +1633,10 @@ export function ResultsView() {
             <span className="large-icon">
               <Sparkles size={35} />
             </span>
-            <h1>There is a little more to discover.</h1>
+            <h1>Your favorite things are a lovely place to start.</h1>
             <p>
-              A few everyday preferences can reveal some lovely gift
-              inspiration.
+              A few everyday choices can uncover gift interests that feel like
+              you. No labels, just possibilities.
             </p>
             <Link href="/questionnaire" className="button primary">
               Find my gift interests

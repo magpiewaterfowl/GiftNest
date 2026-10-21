@@ -2,6 +2,16 @@
 
 import { useSyncExternalStore } from "react";
 import { categories, scoreAnswers, type Category } from "./questionnaire";
+import {
+  giftKey,
+  normalizeSuggestion,
+  recommendationTemplates,
+  restoreRecommendationQueue,
+  reviewQueue,
+  type GiftSuggestion,
+  type Recommendation,
+  type ReviewRecommendation,
+} from "./recommendations";
 
 export type WishlistItem = {
   id: string;
@@ -37,6 +47,7 @@ export type Data = {
   profiles: Profile[];
   groups: Group[];
   credentials: Credential[];
+  recommendations: Recommendation[];
   currentId: string | null;
   activeGroupId: string | null;
 };
@@ -188,6 +199,7 @@ const initialData: Data = {
     },
   ],
   credentials: [],
+  recommendations: [],
   currentId: null,
   activeGroupId: "morgan",
 };
@@ -251,7 +263,14 @@ function readStorage(): Data {
     const raw = localStorage.getItem(storageKey);
     if (raw) {
       const parsed: unknown = JSON.parse(raw);
-      if (isStoredData(parsed)) return parsed;
+      if (isStoredData(parsed))
+        return {
+          ...parsed,
+          recommendations: restoreRecommendationQueue(
+            parsed.recommendations,
+            parsed.profiles.map((profile) => profile.id),
+          ),
+        };
       storageError =
         "Saved data could not be read. A fresh local workspace has been opened.";
     }
@@ -484,7 +503,99 @@ export const actions = {
       if (item) item.received = !item.received;
     });
   },
+  submitSuggestion(recipientId: string, suggestion: GiftSuggestion) {
+    const gift = normalizeSuggestion(suggestion);
+    update((data) => {
+      const sender = ownProfile(data);
+      if (
+        recipientId === sender.id ||
+        !data.profiles.some((profile) => profile.id === recipientId) ||
+        !canViewProfile(data, recipientId)
+      ) {
+        throw new Error("Choose another person in one of your family groups.");
+      }
+      if (
+        data.recommendations.some(
+          (record) =>
+            record.recipientId === recipientId &&
+            giftKey(record.name) === giftKey(gift.name),
+        )
+      )
+        return;
+      data.recommendations.push({
+        id: crypto.randomUUID(),
+        recipientId,
+        ...gift,
+        status: "new",
+      });
+    });
+  },
+  prepareRecommendations() {
+    update((data) => {
+      const profile = ownProfile(data);
+      const known = new Set([
+        ...data.recommendations
+          .filter((record) => record.recipientId === profile.id)
+          .map((record) => giftKey(record.name)),
+        ...profile.wishlist.map((wish) => giftKey(wish.name)),
+      ]);
+      for (const gift of recommendationTemplates(profile.categories)) {
+        if (known.has(giftKey(gift.name))) continue;
+        known.add(giftKey(gift.name));
+        data.recommendations.push({
+          id: crypto.randomUUID(),
+          recipientId: profile.id,
+          ...gift,
+          status: "new",
+        });
+      }
+    });
+  },
+  reviewRecommendation(id: string, decision: "added" | "saved" | "dismissed") {
+    if (!["added", "saved", "dismissed"].includes(decision))
+      throw new Error("Choose an available recommendation action.");
+    update((data) => {
+      const profile = ownProfile(data);
+      const recommendation = data.recommendations.find(
+        (record) => record.id === id && record.recipientId === profile.id,
+      );
+      if (!recommendation)
+        throw new Error("That recommendation is not available in your queue.");
+      if (
+        recommendation.status === "added" ||
+        recommendation.status === "dismissed"
+      )
+        return;
+      if (
+        decision === "added" &&
+        !profile.wishlist.some(
+          (wish) => giftKey(wish.name) === giftKey(recommendation.name),
+        )
+      ) {
+        profile.wishlist.unshift({
+          id: crypto.randomUUID(),
+          name: recommendation.name,
+          price: recommendation.price,
+          note: "",
+          image: "",
+          url: "",
+          received: false,
+        });
+      }
+      recommendation.status = decision;
+    });
+  },
 };
+
+export function ownRecommendations(data: Data | null): ReviewRecommendation[] {
+  if (!data?.currentId) return [];
+  const profile = data.profiles.find((person) => person.id === data.currentId);
+  if (!profile) return [];
+  const wishes = new Set(profile.wishlist.map((wish) => giftKey(wish.name)));
+  return reviewQueue(data.recommendations, profile.id).filter(
+    (record) => !wishes.has(giftKey(record.name)),
+  );
+}
 
 export function useGiftNest() {
   const data = useSyncExternalStore(subscribe, getSnapshot, () => null);

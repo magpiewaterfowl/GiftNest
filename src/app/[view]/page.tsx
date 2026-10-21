@@ -9,6 +9,7 @@ import {
   ResultsView,
 } from "@/components/views";
 import type { Metadata } from "next";
+import { RecommendationsView } from "@/components/recommendations";
 
 const titles: Record<string, string> = {
   dashboard: "Family dashboard",
@@ -18,6 +19,7 @@ const titles: Record<string, string> = {
   wishlist: "My wishlist",
   questionnaire: "Discover your gift interests",
   results: "Your gift personality",
+  recommendations: "Gift inspiration",
 };
 
 export const dynamicParams = false;
@@ -50,7 +52,13 @@ export default async function AppPage({
       return <AuthView />;
     case "profile":
       return (
-        <Suspense fallback={<main id="main" className="loading">Getting your nest ready...</main>}>
+        <Suspense
+          fallback={
+            <main id="main" className="loading">
+              Getting your nest ready...
+            </main>
+          }
+        >
           <ProfileRouteView />
         </Suspense>
       );
@@ -60,6 +68,8 @@ export default async function AppPage({
       return <QuestionnaireView />;
     case "results":
       return <ResultsView />;
+    case "recommendations":
+      return <RecommendationsView />;
     default:
       notFound();
   }

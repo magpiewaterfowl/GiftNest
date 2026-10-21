@@ -6,6 +6,17 @@ import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpRight,
   BookOpen,
+  Clapperboard,
+  CookingPot,
+  Dumbbell,
+  Gem,
+  GraduationCap,
+  Hammer,
+  Monitor,
+  PawPrint,
+  Scissors,
+  Shirt,
+  Sprout,
   Check,
   ChevronDown,
   CircleHelp,
@@ -16,6 +27,7 @@ import {
   Heart,
   Home,
   Leaf,
+  Lightbulb,
   Menu,
   Music2,
   Plus,
@@ -80,12 +92,22 @@ export function CategoryIcon({
   category: Category;
   size?: number;
 }) {
-  const icons: Partial<Record<Category, LucideIcon>> = {
+  const icons: Record<Category, LucideIcon> = {
+    Technology: Monitor,
     "Books & Reading": BookOpen,
-    Gardening: Flower2,
+    Learning: GraduationCap,
+    Gardening: Sprout,
     Outdoors: Leaf,
-    Cooking: Home,
+    Fitness: Dumbbell,
+    Cooking: CookingPot,
+    "Home Improvement": Hammer,
+    Crafting: Scissors,
+    Collectibles: Gem,
     Music: Music2,
+    "Movies & TV": Clapperboard,
+    Fashion: Shirt,
+    "Self-Care": Flower2,
+    Pets: PawPrint,
     Gaming: Gamepad2,
     Travel: Compass,
     "Sentimental Gifts": Heart,
@@ -117,8 +139,15 @@ export function Modal({
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const dialog = ref.current;
+    const previousFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     dialog?.showModal();
-    return () => dialog?.close();
+    return () => {
+      dialog?.close();
+      if (previousFocus?.isConnected) previousFocus.focus();
+    };
   }, []);
   return (
     <dialog
@@ -197,7 +226,7 @@ export function GroupModal({
                       setCopied(true);
                     } catch {
                       setError(
-                        "Could not copy. You can select the code and copy it manually.",
+                        "Your browser could not copy that. Select the code and copy it instead.",
                       );
                     }
                   }}
@@ -260,8 +289,8 @@ export function GroupModal({
       )}
       <p className="local-note">
         <CircleHelp size={15} />
-        Local preview: codes connect accounts in this browser only. Cross-device
-        invites need a shared backend.
+        For now, invite codes connect accounts saved in this browser only. They
+        cannot connect someone on another device yet.
       </p>
     </Modal>
   );
@@ -284,6 +313,7 @@ export function AppShell({
   const nav = [
     { href: "/dashboard", label: "Family dashboard", icon: Home },
     { href: "/wishlist", label: "My wishlist", icon: Heart },
+    { href: "/recommendations", label: "Gift inspiration", icon: Lightbulb },
     { href: "/results", label: "My gift interests", icon: Sparkles },
     { href: "/questionnaire", label: "Questionnaire", icon: ClipboardList },
   ];
@@ -303,8 +333,8 @@ export function AppShell({
         </span>
         <h1>Your people are waiting.</h1>
         <p>
-          Log in to your local account, or take a look around our example
-          family.
+          Log in to the account saved on this device, or meet our fictional
+          family while you take a look around.
         </p>
         <Link className="button primary" href="/login">
           Log in
@@ -313,7 +343,9 @@ export function AppShell({
         <button className="button secondary" onClick={() => actions.demo()}>
           Explore the demo family
         </button>
-        <p className="muted small">Demo data stays in this browser.</p>
+        <p className="muted small">
+          Just looking? The example family is a lovely place to start.
+        </p>
       </main>
     );
   return (
@@ -339,12 +371,13 @@ export function AppShell({
           </span>
           <ChevronDown size={15} />
         </button>
-        <p className="nav-caption">YOUR LITTLE CORNER</p>
+        <p className="nav-caption">MAKE YOURSELF AT HOME</p>
         <nav aria-label="Main navigation">
           {nav.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
+              aria-current={pathname === href ? "page" : undefined}
               className={`nav-item ${pathname === href ? "active" : ""}`}
               onClick={() => setMobileOpen(false)}
             >
@@ -410,11 +443,13 @@ export function AppShell({
                   ? "Family dashboard"
                   : pathname === "/wishlist"
                     ? "My wishlist"
-                    : pathname === "/questionnaire"
-                      ? "Questionnaire"
-                      : pathname === "/results"
-                        ? "Gift interests"
-                        : "Profile"}
+                    : pathname === "/recommendations"
+                      ? "Gift inspiration"
+                      : pathname === "/questionnaire"
+                        ? "Questionnaire"
+                        : pathname === "/results"
+                          ? "Gift interests"
+                          : "Profile"}
               </strong>
             </span>
           </div>
@@ -430,9 +465,12 @@ export function AppShell({
                 />
               </label>
             )}
-            <span className="local-badge">
+            <span
+              className="local-badge"
+              title="Your account, groups, and wishes are saved in this browser on this device only."
+            >
               <span />
-              Local preview
+              This device only
             </span>
             <button
               title="Log out"
@@ -502,17 +540,18 @@ export function AppShell({
             </p>
             <h3>About this preview</h3>
             <p>
-              Accounts, groups, and wishlists are saved only in this browser.
-              Passwords are hashed, but this is not production authentication.
-              Avoid using a real password or sensitive information.
+              Your account, groups, and wishes stay in this browser on this
+              device. This early version does not have the security of a real
+              account service. Use a made-up password and leave out sensitive
+              details.
             </p>
             <p>
               To try inviting someone, copy your group code, log out, create
               another account in this browser, and join with that code.
             </p>
             <p>
-              Clearing browser data removes local accounts and changes. There is
-              no password recovery in this preview.
+              Clearing your browser data can remove your account and wishes.
+              This version cannot recover a forgotten password.
             </p>
           </div>
         </Modal>
